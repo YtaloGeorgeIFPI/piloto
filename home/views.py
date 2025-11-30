@@ -5,7 +5,7 @@ def index(request):
     return HttpResponse("Testando o index")
 
 def sobre(request):
-    return HttpResponse("<h1>Pagina Home</h1>")
+    return HttpResponse("<h1>Pagina Sobre</h1>")
 
 def contato(request):
     return HttpResponse("<h1>Esta é a pagina de contato</h1>")
