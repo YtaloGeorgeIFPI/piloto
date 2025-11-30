@@ -1,11 +1,20 @@
-# Arquivo: home/urls.py
-
+from django.contrib import admin
 from django.urls import path
-from . import views  # Importe as views que você criou
+from django.http import HttpResponse
+from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'),  # A URL raiz do app 'home' chama a função 'index' em views.py
-    path('sobre/', views.sobre, name='sobre'),  # Página sobre
-    path('contato/', views.contato, name='contato'),  # Página de contato
-    path('ajuda/', views.ajuda, name='ajuda'),  # Página de ajuda
+    
+    #Rota para pagina Inicial Raiz
+    path('', views.index, name="index"),
+    
+    #Pagina Sobre
+    path('sobre/', views.sobre, name="sobre"),
+    
+    #Pagina para Contatos
+    path("contato/", views.contato, name="contato"), 
+    
+    #Pagina de Ajuda
+    path("ajuda/", views.ajuda, name="ajuda")
+
 ]

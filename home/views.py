@@ -1,16 +1,14 @@
-# home/views.py
+from django.shortcuts import render
+from django.http import HttpResponse 
 
-from django.shortcuts import render  # Importe render corretamente
-
-# Views da aplicação 'home'
 def index(request):
-    return render(request, 'home/index.html')  # Supondo que você tenha um template 'index.html' no diretório 'home/templates/home'
+    return HttpResponse("A viw index funcionou, Wow, parabéns!")
 
 def sobre(request):
-    return render(request, 'home/sobre.html')  # Template 'sobre.html'
+    return HttpResponse("<h1>Pagina Home</h1>")
 
 def contato(request):
-    return render(request, 'home/contato.html')  # Template 'contato.html'
+    return HttpResponse("<h1>Esta é a pagina de contato</h1>")
 
 def ajuda(request):
-    return render(request, 'home/ajuda.html')  # Template 'ajuda.html'
+    return HttpResponse("<h1>Esta é a pagina de ajuda</h1>")
