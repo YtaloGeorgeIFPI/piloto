@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse 
 
 def index(request):
-    return HttpResponse("A viw index funcionou, Wow, parabéns!")
+    return HttpResponse("Testando o index")
 
 def sobre(request):
     return HttpResponse("<h1>Pagina Home</h1>")
