@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> {% block title %} Title  {% endblock title %} </title>
+</head>
+<body>
+        <a href="{% url "index" %}">Home</a>
+        <a href="{% url "sobre" %}">Sobre</a>
+        <a href="{% url "contato" %}">Contato</a>
+        <a href="{% url "ajuda" %}">Ajuda</a>
+
+<h1> {% block titulo_pagina %} Titulo da Pagina {% endblock titulo_pagina %} </h1>
+</body>
+</html>
