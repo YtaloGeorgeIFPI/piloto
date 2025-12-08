@@ -22,9 +22,11 @@ urlpatterns = [
     # Página de Perfil
     path('perfil/<str:usuario>', views.exibir_perfil, name="exibir_perfil"),
 
-    # URLs já existentes...
-    path('diasemana/<int:num>/', views.dia_da_semana, name='dia_da_semana'),
+    # Rota para o dia da semana
+    path('diasemana/<int:num>/', views.dia_da_semana, name='dia_da_semana'),  # Corrigido
 
-
+        # Outras URLs...
+    path('produto/', views.produto, name='produto'),  # Adicionando a URL para 'produto'
+    # Outras URLs...
 
 ]

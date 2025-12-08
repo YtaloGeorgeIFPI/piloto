@@ -37,4 +37,9 @@ def dia_da_semana(request, num):
     # Obtém o dia correspondente
     dia = dias.get(num)
     return render(request, "dia_da_semana.html", {'dia': dia})
+from django.shortcuts import render
+
+def produto(request):
+    # A lógica da sua view de produto
+    return render(request, "produto.html")
 
