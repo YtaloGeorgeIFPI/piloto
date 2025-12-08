@@ -1,7 +1,12 @@
+
 {% extends "base.html" %}
 
-{% block title %}Página Dia da Semana{% endblock title %}
+{% block title %}Admin Dashboard{% endblock %}
 
-{% block titulo_pagina %}
-    Essa é a página do dia da semana: {{ dia }}
-{% endblock titulo_pagina %}
+{% block titulo_pagina %}Dia da Semana {% endblock %}
+
+{% block conteudo %}
+    <!-- Exibe a mensagem dinâmica que foi passada na view -->
+   {{ conteudo }}
+{% endblock %}
+

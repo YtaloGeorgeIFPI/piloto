@@ -1,23 +1,28 @@
 from django.shortcuts import render
-from django.http import HttpResponse 
+from django.http import HttpResponse
+
+from django.shortcuts import render
 
 def index(request):
-    return render(request, "index.html")
+    # Aqui você pode passar o conteúdo desejado
+    return render(request, "index.html", {'mensagem': 'Bem-vindo ao nosso Sistema'})
 
 def sobre(request):
-    return render(request, "sobre.html")
+    return render(request, "sobre.html", {'mensagem': 'Sobre o sistema'})
 
 def contato(request):
-    return render(request, "contato.html")
+    # Aqui você pode passar o conteúdo desejado
+    return render(request, "contato.html", {'mensagem': 'Entre em Contato'})
+
 
 def ajuda(request):
     return render(request, "ajuda.html")
 
 def exibir_item(request, id):
-    return render(request, "exibir_item.html", {'id':id})
+    return render(request, "exibir_item.html", {'id': id})
 
 def exibir_perfil(request, usuario):
-    return render(request, "exibir_perfil.html", {'usuario':usuario})
+    return render(request, "exibir_perfil.html", {'usuario': usuario})
 
 def dia_da_semana(request, num):
     dias = {
@@ -30,16 +35,15 @@ def dia_da_semana(request, num):
         7: "Sábado",
     }
 
-    # Verifica se o número está entre 1 e 7
     if num < 1 or num > 7:
         return HttpResponse("Número inválido! Use um número entre 1 e 7.")
     
-    # Obtém o dia correspondente
     dia = dias.get(num)
-    return render(request, "dia_da_semana.html", {'dia': dia})
-from django.shortcuts import render
+    return render(request, "dia_da_semana.html", {
+        'dia': dia, 
+        'titulo': f"Dia da Semana - {dia}", 
+        'conteudo': f"O dia da semana {num} corresponde a {dia}!"
+    })
 
 def produto(request):
-    # A lógica da sua view de produto
     return render(request, "produto.html")
-

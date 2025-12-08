@@ -1,5 +1,10 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
-{% block title %} Home  {% endblock title %}
+{% block title %}Admin Dashboard{% endblock %}
 
-{% block titulo_pagina %} Pagina Inicial {% endblock titulo_pagina %}
+{% block titulo_pagina %}Home{% endblock %}
+
+{% block conteudo %}
+    <!-- Exibe a mensagem dinâmica que foi passada na view -->
+    <p>{{ mensagem }}</p>
+{% endblock %}

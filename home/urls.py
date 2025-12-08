@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from django.http import HttpResponse
-from . import views
+from . import views  # Certifique-se de importar as views do mesmo diretório (home)
 
 urlpatterns = [
     # Rota para página Inicial Raiz
@@ -14,7 +13,7 @@ urlpatterns = [
     path("contato/", views.contato, name="contato"), 
     
     # Página de Ajuda
-    path("ajuda/", views.ajuda, name="ajuda"),  # Aqui foi adicionada a vírgula
+    path("ajuda/", views.ajuda, name="ajuda"),  
     
     # Página de Exibição de Item
     path('item/<int:id>', views.exibir_item, name="exibir_item"),
@@ -23,10 +22,11 @@ urlpatterns = [
     path('perfil/<str:usuario>', views.exibir_perfil, name="exibir_perfil"),
 
     # Rota para o dia da semana
-    path('diasemana/<int:num>/', views.dia_da_semana, name='dia_da_semana'),  # Corrigido
+    path('diasemana/<int:num>/', views.dia_da_semana, name='dia_da_semana'),
+  # Corrigido
 
-        # Outras URLs...
+    # Adicionando a URL para 'produto'
     path('produto/', views.produto, name='produto'),  # Adicionando a URL para 'produto'
-    # Outras URLs...
 
+    # Outras URLs...
 ]
