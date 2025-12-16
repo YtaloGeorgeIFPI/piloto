@@ -4,7 +4,6 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # =========================================================
 # CORE
 # =========================================================
@@ -21,12 +20,10 @@ ALLOWED_HOSTS = [
     ".vercel.app",
 ]
 
-# Necessário para POST/Forms na Vercel (CSRF)
-CSRF_TRUSTED_ORIGINS = [
-    "https://*.vercel.app",
-]
+# Necessário para POST / forms na Vercel
+CSRF_TRUSTED_ORIGINS = ["https://*.vercel.app"]
 
-# Corrige HTTPS atrás do proxy da Vercel
+# Proxy HTTPS da Vercel
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
@@ -75,7 +72,7 @@ WSGI_APPLICATION = "pweb.wsgi.application"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],  # se tiver templates globais, coloque aqui
+        "DIRS": [],  # se tiver templates fora dos apps, adicione aqui
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -92,7 +89,7 @@ TEMPLATES = [
 # DATABASE
 # =========================================================
 
-# 🔹 Banco local (SQLite)
+# Local (SQLite)
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -100,19 +97,23 @@ DATABASES = {
     }
 }
 
-# 🔹 Produção (Vercel + Neon)
-# Prioridade CORRETA das variáveis
+# Produção (Vercel + Neon)
+# ⚠️ PRIORIDADE TOTAL para NON-POOLING
 DATABASE_URL = (
-    os.getenv("DATABASE_URL_UNPOOLED")       # ✅ migrations / sem pooler
+    os.getenv("DATABASE_URL_UNPOOLED")
+    or os.getenv("DATABASE2_DATABASE_URL_UNPOOLED")
     or os.getenv("POSTGRES_URL_NON_POOLING")
-    or os.getenv("DATABASE_URL")              # pooler
+    or os.getenv("DATABASE2_POSTGRES_URL_NON_POOLING")
+    or os.getenv("DATABASE_URL")
+    or os.getenv("DATABASE2_DATABASE_URL")
     or os.getenv("POSTGRES_URL")
+    or os.getenv("DATABASE2_POSTGRES_URL")
 )
 
 if DATABASE_URL:
     DATABASES["default"] = dj_database_url.parse(
         DATABASE_URL,
-        conn_max_age=0,        # 🔥 ESSENCIAL em serverless (Vercel)
+        conn_max_age=0,      # serverless safe
         ssl_require=True,
     )
 
@@ -143,20 +144,17 @@ USE_TZ = True
 # STATIC FILES
 # =========================================================
 
-STATIC_URL = "/static/"
+STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # =========================================================
-# PRODUÇÃO: SEGURANÇA
+# PRODUÇÃO — SEGURANÇA (Vercel)
 # =========================================================
 
 if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-
-    # ⚠️ Em Vercel pode causar loop se algo estiver errado,
-    # mas normalmente funciona bem
     SECURE_SSL_REDIRECT = True
