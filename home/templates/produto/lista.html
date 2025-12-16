@@ -2,26 +2,37 @@
 
 {% block title %}Admin Dashboard{% endblock %}
 
-{% block titulo_pagina %}Listagem de Produtos  {% endblock %}
+{% block titulo_pagina %}Listagem de Produtos{% endblock %}
 
 {% block conteudo %}
- <table class="table table-bordered table-hover mx-auto">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Descrição</th>
-                <th scope="col">Valor (R$)</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in lista %}
-            <tr>
-                <td>{{item.id}}</td>
-                <td>{{item.nome}}</td>
-                <td>{{item.preco}}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+
+<button onclick="location='{% url "form_produto" %}'" class="btn btn-primary mb-4" type="button">
+    Novo Produto
+</button>
+
+<table class="table table-bordered table-hover mx-auto">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Descrição</th>
+            <th>Valor (R$)</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in lista %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.nome }}</td>
+            <td>{{ item.preco }}</td>
+            <td>
+                <a href="{% url 'detalhes_produto' item.id %}" class="btn btn-info btn-sm">Detalhes</a>
+                <a href="{% url 'editar_produto' item.id %}" class="btn btn-warning btn-sm">Alterar</a>
+                <a href="{% url 'excluir_produto' item.id %}" class="btn btn-danger btn-sm">Excluir</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 {% endblock %}

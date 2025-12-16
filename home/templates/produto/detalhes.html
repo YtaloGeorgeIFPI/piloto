@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block titulo_pagina %}Detalhes do Produto{% endblock %}
+
+{% block conteudo %}
+<h3>Detalhes do Produto</h3>
+
+<div class="card p-3">
+    <p><strong>ID:</strong> {{ produto.id }}</p>
+    <p><strong>Nome:</strong> {{ produto.nome }}</p>
+    <p><strong>Preço:</strong> R$ {{ produto.preco }}</p>
+</div>
+
+<a href="{% url 'produto' %}" class="btn btn-secondary mt-3">Voltar</a>
+{% endblock %}
