@@ -4,18 +4,30 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Em produção (Vercel), use uma SECRET_KEY por variável de ambiente.
-# Localmente você pode manter um valor padrão.
+
+# =========================================================
+# CORE
+# =========================================================
+
+# Em produção (Vercel), use SECRET_KEY em variável de ambiente
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-change-me")
 
-# DEBUG deve ser False na Vercel
+# DEBUG: local = 1, produção = 0
 DEBUG = os.getenv("DEBUG", "0") == "1"
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".vercel.app"]
 
-# ---------------------------
+# Necessário para POST/Forms na Vercel (CSRF)
+CSRF_TRUSTED_ORIGINS = ["https://*.vercel.app"]
+
+# Proxies/HTTPS na Vercel (evita problemas de redirect e secure cookies)
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+
+# =========================================================
 # APPS
-# ---------------------------
+# =========================================================
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -26,9 +38,11 @@ INSTALLED_APPS = [
     "home",
 ]
 
-# ---------------------------
+
+# =========================================================
 # MIDDLEWARE
-# ---------------------------
+# =========================================================
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -39,15 +53,23 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "pweb.urls"
 
-# ---------------------------
+# =========================================================
+# URLS / WSGI
+# =========================================================
+
+ROOT_URLCONF = "pweb.urls"
+WSGI_APPLICATION = "pweb.wsgi.application"
+
+
+# =========================================================
 # TEMPLATES
-# ---------------------------
+# =========================================================
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [],  # se tiver templates fora do app, coloque aqui
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -59,13 +81,11 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "pweb.wsgi.application"
 
-# ---------------------------
-# DATABASE (LOCAL + PRODUÇÃO)
-# ---------------------------
-
-# Default local (SQLite)
+# =========================================================
+# DATABASE
+# =========================================================
+# Local: SQLite
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -73,28 +93,27 @@ DATABASES = {
     }
 }
 
-# Vercel/Neon geralmente fornece estas variáveis (integração oficial):
-# - POSTGRES_URL (pooling)
-# - POSTGRES_URL_NON_POOLING (sem pooling)  ✅ melhor para migrations
-# - DATABASE_URL_UNPOOLED (sem pooling)
-# - DATABASE_URL (às vezes)
+# Produção (Vercel/Neon):
+# Priorize SEM pooling para evitar dor de cabeça com migrations/conexão.
 DATABASE_URL = (
     os.getenv("DATABASE_URL_UNPOOLED")
     or os.getenv("POSTGRES_URL_NON_POOLING")
-    or os.getenv("POSTGRES_URL")
     or os.getenv("DATABASE_URL")
+    or os.getenv("POSTGRES_URL")
 )
 
 if DATABASE_URL:
     DATABASES["default"] = dj_database_url.parse(
         DATABASE_URL,
-        conn_max_age=600,
+        conn_max_age=0,   # mais seguro em serverless
         ssl_require=True,
     )
 
-# ---------------------------
+
+# =========================================================
 # PASSWORD VALIDATION
-# ---------------------------
+# =========================================================
+
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -102,18 +121,34 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# ---------------------------
+
+# =========================================================
 # INTERNATIONALIZATION
-# ---------------------------
+# =========================================================
+
 LANGUAGE_CODE = "pt-br"
 TIME_ZONE = "America/Fortaleza"
 USE_I18N = True
 USE_TZ = True
 
-# ---------------------------
+
+# =========================================================
 # STATIC FILES
-# ---------------------------
+# =========================================================
+
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# =========================================================
+# PRODUÇÃO: SEGURANÇA BÁSICA (opcional, mas recomendado)
+# =========================================================
+if not DEBUG:
+    # Cookies mais seguros em HTTPS
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    # (opcional) força HTTPS
+    SECURE_SSL_REDIRECT = True
